@@ -12,7 +12,7 @@ data = pd.read_csv("Phishing_Legitimate_full.csv")
 # Eliminar la columna de ID
 
 # Separar características y etiquetas
-X = data.drop(columns=["CLASS_LABEL","rid"])
+X = data.drop(columns=["CLASS_LABEL","id"])
 y = data["CLASS_LABEL"]
 
 # Dividir los datos en conjuntos de entrenamiento y prueba
@@ -65,8 +65,7 @@ def extract_features(url):
         "PathLength": len(parsed_url.path),
         "QueryLength": len(parsed_url.query),
         "DoubleSlashInPath": 1 if '//' in parsed_url.path else 0,
-        # Hasta aca esta bien
-        "NumSensitiveWords": 0,  # Agregar función para contar palabras sensibles
+         "NumSensitiveWords": 0,  # Agregar función para contar palabras sensibles
         "EmbeddedBrandName": 0,  # Agregar función para detectar nombres de marcas incrustados
         "PctExtHyperlinks": 0.0,  # Agregar función para calcular porcentaje de hipervínculos externos
         "PctExtResourceUrls": 0.0,  # Agregar función para calcular porcentaje de URL de recursos externos
@@ -109,6 +108,8 @@ model.fit(X_train, y_train)
 
 # URL de ejemplo
 url = "https://mermaid.live/edit#pako:eNplULEKwkAM_ZWQuYuIy60KTp26dgm9WGPtRa45ShH_3bO1UDFTeO_lvSRPbNQzOrxpioGnOkAuE7szlBOMGjsJLXj6MgM3JhrgrGA60wsOUFLHYEwODg5KXuEsTI_BSOLgYL9lTsu8g90HLeBI9pdx1X7r5HUMq9dPSiU2k98ILLDn2JP4fNnzI6rRrpy90OXWU14b6_DKOkqm1RQadBYTF5genoxPQm2kfgXZi2ksl081Gi7S4usN5KNifg"
+
+url = "htps://faceboock.com/í"
 
 # Predecir si la URL es maliciosa
 prediction, probability = predict_malicious(url, model)

@@ -5,10 +5,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
 # Cargar los datos
-data = pd.read_csv("content/Phishing_Legitimate_full.csv")
+data = pd.read_csv("Phishing_Legitimate_full.csv")
 
 # Eliminar la columna de ID
-
 # Separar características y etiquetas
 X = data.drop(columns=["CLASS_LABEL", "id"])
 y = data["CLASS_LABEL"]
@@ -30,4 +29,4 @@ accuracy = accuracy_score(y_test, y_pred)
 print("Precisión del modelo:", accuracy)
 
 # Guardar el modelo
-joblib.dump(rf_classifier, "content/url-model.pkl")
+joblib.dump(rf_classifier, "url-model.pkl")

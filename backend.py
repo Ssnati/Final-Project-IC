@@ -73,60 +73,28 @@ def extract_features(url_to_extract):
     print(f"{RED}Contenido de la URL parseada: {RESET}", parsed_url)
     url_features = {
         "NumDots": url_to_extract.count('.'),
-        "SubdomainLevel": len(parsed_url.hostname.split('.')) - 2,
         "PathLevel": len(parsed_url.path.split('/')),
         "UrlLength": len(url_to_extract),
         "NumDash": url_to_extract.count('-'),
-        "NumDashInHostname": parsed_url.hostname.count('-'),
-        # "AtSymbol": 1 if '@' in url else 0,
-        # "TildeSymbol": 1 if '~' in url else 0,
-        "NumUnderscore": url_to_extract.count('_'),
-        "NumPercent": url_to_extract.count('%'),
         "NumQueryComponents": len(parse_qs(parsed_url.query)),
         "NumAmpersand": url_to_extract.count('&'),
-        # "NumHash": url.count('#'),
         "NumNumericChars": sum(c.isdigit() for c in url_to_extract),
-        # "NoHttps": 0 if url.startswith('https') else 1,
-        "RandomString": 1 if len(parsed_url.path.split('/')[-1]) >= 12 else 0,  # 12 es un umbral arbitrario
-        # "IpAddress": 1 if parsed_url.netloc.replace('.', '').isdigit() else 0,
-        # "DomainInSubdomains": 1 if parsed_url.netloc.count(parsed_url.netloc.split('.')[-1]) > 1 else 0,
-        "DomainInPaths": 1 if parsed_url.netloc.split('.')[-2] in parsed_url.path else 0,
-        # Verificar si el dominio está en la ruta
-        # "HttpsInHostname": 1 if 'https' in parsed_url.netloc else 0,
-        # "HostnameLength": len(parsed_url.netloc),
+        "NumDashInHostname":0,
         "PathLength": len(parsed_url.path),  # Longitud de la ruta
+        "PopUpWindow": 0,
         "QueryLength": len(parsed_url.query),  # Longitud de la consulta
-        # "DoubleSlashInPath": 1 if '//' in parsed_url.path else 0,
-        # Hasta aca esta bien
+        "SubdomainLevel": 0,
         "NumSensitiveWords": obtener_numero_de_palabras_sensibles(url_to_extract),
-        "EmbeddedBrandName": obtener_nombre_de_marca_incrustado(url_to_extract),
         "PctExtHyperlinks": calculate_pct_ext_hyperlinks(url_to_extract),  #
         "PctExtResourceUrls": 0.0,  #
         "ExtFavicon": 0,  #
         "InsecureForms": 0,  #
-        "RelativeFormAction": 0,  #
-        "ExtFormAction": 0,  #
-        "AbnormalFormAction": 0,  #
         "PctNullSelfRedirectHyperlinks": 0.0,
-        # Agregar función para calcular porcentaje de hipervínculos de auto-redirección nulos
         "FrequentDomainNameMismatch": 0,
-        # Agregar función para detectar discrepancias frecuentes en el nombre de dominio
-        # "FakeLinkInStatusBar": 0,  # Agregar función para detectar enlaces falsos en la barra de estado
-        # "RightClickDisabled": 0,  # Agregar función para detectar clic derecho deshabilitado
-        # "PopUpWindow": 0,  # Agregar función para detectar ventanas emergentes
         "SubmitInfoToEmail": 0,  #
         "IframeOrFrame": 0,  #
-        "MissingTitle": 0,  #
-        "ImagesOnlyInForm": 0,  #
-        # "SubdomainLevelRT": 0,  # Agregar función temporal relacionada con el nivel del subdominio
-        # "UrlLengthRT": 0,  # Agregar función temporal relacionada con la longitud de la URL
-        # "PctExtResourceUrlsRT": 0.0,
-        # Agregar función temporal relacionada con el porcentaje de URL de recursos externos
-        # "AbnormalExtFormActionR": 0,
-        # Agregar función temporal relacionada con acciones de formulario externas anormales
         "ExtMetaScriptLinkRT": 0,  #
         "PctExtNullSelfRedirectHyperlinksRT": 0.0
-        # Agregar función temporal relacionada con el porcentaje de hipervínculos de auto-redirección nulos
     }
     return url_features
 
