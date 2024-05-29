@@ -64,14 +64,15 @@ class UrlValidator:
         self.__parameters.append(self.__get_subdomain_level())
         self.__parameters.append(self.__get_num_sensitive_words())
         self.__parameters.append(self.__get_pct_ext_hyper_links())
-        # Verificados
         self.__parameters.append(self.__get_pct_ext_resource_urls())
         self.__parameters.append(self.__get_ext_favicon())
         self.__parameters.append(self.__get_insecure_forms())
+        # Verificados
         self.__parameters.append(self.__get_pct_null_self_redirect_hyperlinks())
         self.__parameters.append(self.__get_frequent_domain_name_mismatch())
         self.__parameters.append(self.__get_submit_info_to_email())
         self.__parameters.append(self.__get_iframe_or_frame())
+        #null test
         self.__parameters.append(self.__get_ext_meta_script_link_rt())
         self.__parameters.append(self.__get_pct_ext_null_self_redirect_hyperlinks_rt())
 
@@ -131,11 +132,29 @@ class UrlValidator:
         return ext_links / total_links if total_links > 0 else 0
 
     def __get_pct_ext_resource_urls(self):
+
+          # Extraer el dominio del URL
         domain = self.__url_parsed.netloc
+
+        # Parsear el contenido HTML con BeautifulSoup
         soup = BeautifulSoup(self.__html_content, 'html.parser')
-        resources = soup.find_all(['script', 'link', 'img'], src=True)
+        # Encontrar todas las etiquetas de recursos relevantes
+        script_resources = soup.find_all('script', src=True)
+        img_resources = soup.find_all('img', src=True)
+        link_resources = soup.find_all('link', href=True)
+        # Combinar todas las etiquetas en una lista
+        resources = script_resources + img_resources + link_resources
         total_resources = len(resources)
-        ext_resources = sum(1 for res in resources if urlparse(res['src']).netloc != domain)
+        ext_resources = 0
+        for res in resources:
+            if res.name == 'link':
+                resource_url = res['href']
+            else:
+                resource_url = res['src']
+            if urlparse(resource_url).netloc != domain:
+                ext_resources += 1
+
+        # Calcular y devolver el porcentaje de recursos externos
         return ext_resources / total_resources if total_resources > 0 else 0
 
     def __get_ext_favicon(self):
@@ -144,6 +163,9 @@ class UrlValidator:
         favicons = soup.find_all('link', rel='icon')
         result = any(urlparse(favicon['href']).netloc != domain for favicon in favicons)
         return 1 if result else 0
+
+    def add_parameters(self):
+        self.__parameters.append(self.__get_ext_favicon())
 
     def __get_insecure_forms(self):
         soup = BeautifulSoup(self.__html_content, 'html.parser')
