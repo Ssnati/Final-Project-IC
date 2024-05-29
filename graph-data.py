@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Cargar los datos
-data = pd.read_csv("content/Phishing_Legitimate_full.csv")
+data = pd.read_csv("Phishing_Legitimate_full.csv")
 
 # Grafica para ver la distribución de las clases
 plt.figure(figsize=(6, 4))
