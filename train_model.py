@@ -7,10 +7,19 @@ from sklearn.metrics import accuracy_score
 # Cargar los datos
 data = pd.read_csv("Phishing_Legitimate_full.csv")
 
-# Eliminar la columna de ID
-# Separar características y etiquetas
-X = data.drop(columns=["CLASS_LABEL", "id"])
-y = data["CLASS_LABEL"]
+# Especificar las columnas a mantener
+columns_to_keep = ["NumDots", "PathLevel", "UrlLength", "NumDash", "NumQueryComponents", "NumAmpersand",
+                   "NumNumericChars", "NumDashInHostname", "PathLength", "QueryLength", "SubdomainLevel",
+                   "NumSensitiveWords", "PctExtHyperlinks", "PctExtResourceUrls", "ExtFavicon", "InsecureForms",
+                   "PctNullSelfRedirectHyperlinks", "FrequentDomainNameMismatch", "SubmitInfoToEmail",
+                   "IframeOrFrame", "ExtMetaScriptLinkRT", "PctExtNullSelfRedirectHyperlinksRT", "CLASS_LABEL"]
+
+# Filtrar las columnas especificadas
+filtered_data = data[columns_to_keep]
+
+# Separar características (X) y la etiqueta (y)
+X = filtered_data.drop(columns=["CLASS_LABEL"])
+y = filtered_data["CLASS_LABEL"]
 
 # Dividir los datos en conjuntos de entrenamiento y prueba
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)

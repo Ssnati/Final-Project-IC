@@ -3,28 +3,40 @@ from streamlit_shap import st_shap
 import shap
 import time
 import joblib
-import xgboost
-import numpy as np
 import pandas as pd
-import random  # Importar la librería random
-from colab import extract_features 
+import random  # Importar la librería random si es necesario
+from UrlValidator import *
 
-#Variable PCT
+# Variable PCT
 pct_phishing = 0
+
+# Cargar el modelo
+rf_classifier = joblib.load("url-model.pkl")
 
 def available(display=0):
     return display
 
 def get_text_result():
     if pct_phishing >= 50:
-        return f"<span style='color:red'>Su URL ingresada es un {pct_phishing}% riesgoso de usar.</span>"
+        return f"<span style='color:red'>Su URL ingresada es un {pct_phishing}% riesgosa de usar.</span>"
     else:
         return f"<span style='color:green'>Su URL ingresada es un {100 - pct_phishing}% segura de usar.</span>"
 
-# Aquí en esta función nse ejecua el modelo y nos debe dar le porcentaje [1 phishing, 0 normal]
-def execute_alg():
+def execute_alg(url):
     global pct_phishing
-    pct_phishing = random.randint(0, 100)  # TODO: Retirar aleatorio entre 0 y 100
+    # Crear una instancia de UrlValidator y comprobar la URL
+    url_validator = UrlValidator(url)
+    url_validator.comprobar()
+    
+    # Obtener los parámetros como un diccionario
+    url_params = url_validator.get_parameters_dict()
+    
+    # Crear un DataFrame con los parámetros
+    url_df = pd.DataFrame([url_params])
+    
+    # Realizar la predicción
+    prediction = rf_classifier.predict(url_df)
+    pct_phishing = 100 if prediction[0] == 1 else 0
 
 # Titles
 st.markdown(" # URL Phishing Analyzer")
@@ -36,7 +48,7 @@ url_input = url_input_col.text_input("Ingrese la URL para analizar:", placeholde
 analyze_button = button_col.button("Analizar")
 
 if analyze_button and len(url_input) >= 10:
-    execute_alg()
+    execute_alg(url_input)
     
     # Progress Bar
     progress_bar = st.progress(0)
