@@ -45,9 +45,11 @@ def execute_alg(url):
     # Crear un DataFrame con los parámetros
     url_df = pd.DataFrame([url_params])
 
-    # Realizar la predicción
-    prediction = rf_classifier.predict(url_df)
-    pct_phishing = 100 if prediction[0] == 1 else 0
+    # Realizar la predicción de probabilidad
+    probability = rf_classifier.predict_proba(url_df)
+
+    # Calcular el porcentaje de phishing
+    pct_phishing = probability[0][1] * 100
 
     return url_df
 
@@ -112,7 +114,6 @@ with centered_columns[1]:
 
     if analyze_button and len(url_input) >= 10:
         url_df = execute_alg(url_input)
-        print(url_df)
 
         # Progress Bar
         progress_bar = st.progress(0)
