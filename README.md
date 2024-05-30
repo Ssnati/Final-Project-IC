@@ -97,8 +97,4 @@ Las contribuciones son bienvenidas. Para contribuir, por favor sigue estos pasos
 
 ## Autores
 
-Este proyectofue hecho por Thomas Sorza y Santiago Orjuela.
-
----
-
-Este README proporciona una guía detallada para instalar, entrenar y utilizar el modelo de detección de phishing URLs en una aplicación web basada en Streamlit. Asegúrate de seguir cada paso para garantizar una correcta configuración y funcionamiento del proyecto. 
+Este proyecto fue hecho por *Thomas Sorza* y *Santiago Orjuela*.
