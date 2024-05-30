@@ -6,6 +6,7 @@ import requests
 import time
 from UrlValidator import *
 
+
 # Clase UrlValidator
 class UrlValidator:
     DOMAIN_EXTENSIONS = ['.com', '.org', '.net', '.edu', '.gov', '.mil', '.int', '.arpa', '.co', '.info', '.biz', '.it',

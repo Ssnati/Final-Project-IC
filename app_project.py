@@ -1,3 +1,4 @@
+import re
 import streamlit as st
 import pandas as pd
 import joblib
@@ -17,8 +18,7 @@ rf_classifier = joblib.load("url-model.pkl")
 
 # Define a custom color palette
 custom_palette = [
-    "#005BFF", "#FF6347", "#32CD32", "#FFD700",
-    "#4B0082", "#FF4500", "#8A2BE2", "#00CED1", "#FF1493"
+    "#005BFF", "#FF6347", "#32CD32", "#FFD700", "#4B0082", "#FF4500", "#8A2BE2", "#00CED1", "#FF1493"
 ]
 
 
@@ -101,6 +101,7 @@ def plot_feature_analysis(data):
 
 # Columnas centradas para el título y la entrada de URL
 centered_columns = st.columns([1, 2, 1])
+validation = False
 
 with centered_columns[1]:
     # Titles
@@ -112,25 +113,31 @@ with centered_columns[1]:
     url_input = url_input_col.text_input("Ingrese la URL para analizar:", placeholder="Presione Enter para aplicar")
     analyze_button = button_col.button("Analizar")
 
+
+    def progress_bar():
+        my_bar = st.progress(0)
+        for percent_complete in range(100):
+            time.sleep(0.1)
+            my_bar.progress(percent_complete + 1)
+
+
     if analyze_button and len(url_input) >= 10:
-        url_df = execute_alg(url_input)
-
-        # Progress Bar
-        progress_bar = st.progress(0)
-        for perc_completed in range(100):
-            time.sleep(0.03)
-            progress_bar.progress(perc_completed + 1)
-
-        # Expandable section
-        with st.expander(" ¡Su resultado está listo! "):
-            st.write(get_text_result(), unsafe_allow_html=True)
+        if not (url_input.startswith("http://") or url_input.startswith("https://")):
+            st.error(" ¡Oops! La información ingresada no parece ser de una URL válida. ")
+        else:
+            url_df = execute_alg(url_input)
+            validation = True
+            progress_bar()
+            with st.expander(" ¡Su resultado está listo! "):
+                st.write(get_text_result(), unsafe_allow_html=True)
     else:
         st.error("La URL debe tener al menos 10 caracteres.")
 
-if analyze_button and len(url_input) >= 10:
+# Mostrar el análisis de características si se ha hecho clic en el botón de análisis y la URL tiene al menos 10 caracteres
+# Se deja despues porque tiene que tomar el tamaño del ancho de la pagina
+if analyze_button and len(url_input) >= 10 and validation:
     with st.expander(" ¡Análisis de características de la URL! "):
         plot_feature_analysis(url_df)
-
     pct_phishing = 0
 
 
