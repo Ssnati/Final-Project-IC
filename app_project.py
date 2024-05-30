@@ -110,14 +110,14 @@ with centered_columns[1]:
 
     # Input field and button in a single row
     url_input_col, button_col = st.columns([3, 1])
-    url_input = url_input_col.text_input("Ingrese la URL para analizar:", placeholder="Presione Enter para aplicar")
+    url_input = url_input_col.text_input("Ingrese la URL para analizar:", placeholder="Ingrese su URL ")
     analyze_button = button_col.button("Analizar")
 
 
     def progress_bar():
         my_bar = st.progress(0)
         for percent_complete in range(100):
-            time.sleep(0.1)
+            time.sleep(0.03)
             my_bar.progress(percent_complete + 1)
 
 
